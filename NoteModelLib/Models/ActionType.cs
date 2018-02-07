@@ -1,14 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NoteModelLib.Models
 {
     /// <summary>
     /// This class represent Type of an Action
     /// </summary>
+    [Table("TypeAction")]
     public class ActionType
     {
-
-        public int IdType { get; set; }
+        [Key]
+        public Int32 IdType { get; set; }
+        [MaxLength(50)]
+        [Column("Libelle", TypeName = "nvarchar")]
         public string LibelleType { get; set; }
 
 
@@ -16,6 +22,6 @@ namespace NoteModelLib.Models
         /// <summary>
         /// Get all actions from this ActionType
         /// </summary>
-        public ICollection<ActionCompte> Actions { get; set; }
+        public virtual ICollection<ActionCompte> Actions { get; set; }
     }
 }
