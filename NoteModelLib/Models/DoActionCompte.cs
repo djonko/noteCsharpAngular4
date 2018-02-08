@@ -12,7 +12,7 @@ namespace NoteModelLib.Models
     /// Do action on Account 
     /// </summary>
     [Table("DoAction")]
-    public class DoActionCompte
+    public class DoActionCompte : Entity
     {
         
         [Key]
@@ -27,9 +27,55 @@ namespace NoteModelLib.Models
         [MaxLength(300)]
         public string DetailsAction { get; set; }
 
+        private DateTime? _createdDate;
+        private DateTime? _updatedDate;
+        
 
-        public DateTime? createdDate { get; set; }
-        public DateTime? updatedDate { get; set; }
+        public DateTime? CreatedDate
+        {
+            get
+            {
+                if (_createdDate.HasValue)
+                {
+                    return _createdDate.Value.ToLocalTime();
+                }
+                return null;
+            }
+            set
+            {
+                if (value.HasValue)
+                {
+                    _createdDate = value.Value;
+                }
+                else
+                {
+                    _createdDate = null;
+                }
+            }
+        }
+
+        public DateTime? UpdatedDate
+        {
+            get
+            {
+                if (_updatedDate.HasValue)
+                {
+                    return _updatedDate.Value.ToLocalTime();
+                }
+                return null;
+            }
+            set
+            {
+                if (value.HasValue)
+                {
+                    _updatedDate = value.Value;
+                }
+                else
+                {
+                    _updatedDate = null;
+                }
+            }
+        }
 
         [Required]
         public double Amont { get; set; }
@@ -38,5 +84,17 @@ namespace NoteModelLib.Models
         public virtual ActionCompte Action { get; set; }
         [ForeignKey("IdCompte")]
         public virtual Compte Compte { get; set; }
+
+        public override void OnBeforeInsert()
+        {
+            CreatedDate = DateTime.UtcNow;
+            base.OnBeforeInsert();
+        }
+
+        public override void OnBeforeUpdate()
+        {
+            UpdatedDate = DateTime.UtcNow;
+            base.OnBeforeUpdate();
+        }
     }
 }

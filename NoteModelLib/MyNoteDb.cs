@@ -26,6 +26,38 @@ namespace NoteModelLib
             base.OnModelCreating(modelBuilder);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns> Int </returns>
+
+        public override int SaveChanges()
+        {
+            var changedEntities = ChangeTracker.Entries();
+
+            foreach (var changedEntity in changedEntities)
+            {
+                if (changedEntity.Entity is Entity)
+                {
+                    var entity = (Entity)changedEntity.Entity;
+
+                    switch (changedEntity.State)
+                    {
+                        case EntityState.Added:
+                            entity.OnBeforeInsert();
+                            break;
+
+                        case EntityState.Modified:
+                            entity.OnBeforeUpdate();
+                            break;
+
+                    }
+                }
+            }
+
+            return base.SaveChanges();
+        }
+
         // Add a DbSet for each entity type that you want to include in your model. For more information 
         // on configuring and using a Code First model, see http://go.microsoft.com/fwlink/?LinkId=390109.
 
